@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}All Users {% endblock %}
+{% block body %}
+<div class="user-div">
+    <h1>Click a User to See User ID</h1>
+    {% for user in users %}
+    <br>
+        <a href="/users/{{ user.user_id }}">
+            {{ user.email}}
+        </a>
+    <br>
+    {% endfor %}
+</div>
+
+{% endblock %}

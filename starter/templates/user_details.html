@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ user.email }} - Personal Page {% endblock %}
+
+{% block body %}
+<div class="user-div">
+<h1>{{ user.email }}'s Ratings</h1>
+<br><br>
+
+{% for rating in user.ratings %}
+        <img class="user-img" src="{{ rating.movie.poster_path }}"  />
+        <br>
+        {{ rating.movie.title }}
+        <br>
+        <span class=rating_num){{ rating.rating_id }} > Rating: {{ rating.score }} 
+        </span>
+        <br>
+        {% if session["user_email"] == user.email %}
+        <button class="edit-movie-rating btn btn-warning" id={{ rating.rating_id }}> Edit Score</button>
+        {% endif %}
+    
+    <br><br>
+{% endfor %}
+</div>
