@@ -9,16 +9,16 @@
     {{ movie.overview }}
 </p>
 
-{% if session.get('user_email) %}
+{% if session.get('user_email') %}
 <h2>Rate this movie</h2>
 <form action="/movies{{ movie.movie_id }}/ratings" method="POST">
     <p>
         Rating:
-        <select naem="rating">
+        <select name="rating">
             <option value="">Select Rating</option>
             {% for num in range(6) %}
                 <option vlaue="{{ num }}">{{ num }}</option>
-                {{% endfor %}}
+                {% endfor %}
         </select>
     </p>
     <p><input type="submit"></p>

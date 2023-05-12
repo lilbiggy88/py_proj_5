@@ -7,7 +7,7 @@ import crud
 
 from jinja2 import StrictUndefined
 
-# login_manager = LoginManager()
+login_manager = LoginManager()
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -66,13 +66,61 @@ def register_user():
     if user:
         flash('Sorry, that email already exists. Try a different one.')
     else:
-        user + crud.create_user(email, password)
+        user = crud.create_user(email, password)
         db.session.add(user)
         db.session.commit()
         flash('Account created successfully! You can now login!')
     return redirect('/')
 
-#Create login and update the rating and create a new rating for a movie
+@app.route('/login', methods=['POST'])
+def process_login():
+    """Process user login"""
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    user = crud.get_user_by_email(email)
+    if not user or user.password != password:
+        flash("Email or password is incorrect. Please try again.")
+    else:
+        session["user_email"] = user.email
+        flash(f'Welcome back, {user.email}!')
+
+    return redirect("/")
+
+@app.route("/update_rating", methods=["POST"])
+def update_rating():
+    rating_id = request.json["rating_id"]
+    updated_score = request.json["updated_score"]
+    Rating.update(rating_id, updated_score)
+    db.session.commit()
+
+    return "Nailed it"
+
+@app.route('/movies/<movie_id>/ratings', methods=['POST'])
+def create_rating(movie_id):
+    """Create a new rating for a movie."""
+
+    logged_in_email = session.get("user_email")
+    rating_score = request.form.get('rating')
+
+    if logged_in_email is None:
+        flash("Login in to rate a movie!")
+    elif not rating_score:
+        flash("You did not select a score for your rating!")
+    else:
+        user = User.get_by_email(logged_in_email)
+        movie = Movie.get_by_id(movie_id)
+
+        rating = Rating.create(user, movie, int(rating_score))
+        db.session.add(rating)
+        db.session.commit()
+
+        flash(f"You rated this movie {rating_score} out of 5!")
+    
+    return redirect(f"/movies/{movie_id}") 
+
+#create a new rating for a movie
 
 
 if __name__ == "__main__":
