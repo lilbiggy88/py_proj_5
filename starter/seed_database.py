@@ -31,6 +31,7 @@ for movie in movie_data:
     movies_in_db.append(db_movie)
     
 model.db.session.add_all(movies_in_db)
+model.db.session.commit()
 
 for n in range(10):
     email = f"user{n}@test.com"
