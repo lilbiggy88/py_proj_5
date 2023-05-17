@@ -109,10 +109,10 @@ def create_rating(movie_id):
     elif not rating_score:
         flash("You did not select a score for your rating!")
     else:
-        user = User.get_by_email(logged_in_email)
-        movie = Movie.get_by_id(movie_id)
+        user = crud.get_user_by_email(logged_in_email)
+        movie = crud.get_movie_by_id(movie_id)
 
-        rating = Rating.create(user, movie, int(rating_score))
+        rating = crud.create_rating(user, movie, int(rating_score))
         db.session.add(rating)
         db.session.commit()
 

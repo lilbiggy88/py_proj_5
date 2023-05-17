@@ -11,7 +11,7 @@
 
 {% if session.get('user_email') %}
 <h2>Rate this movie</h2>
-<form action="/movies{{ movie.movie_id }}/ratings" method="POST">
+<form action="/movies/{{ movie.movie_id }}/ratings" method="POST">
     <p>
         Rating:
         <select name="rating">
